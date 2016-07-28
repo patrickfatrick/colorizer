@@ -34,12 +34,17 @@ const colorizer = {
     }
     return array
   },
-  rgb (start) {
-    if (typeof start === 'string') start = Number.parseInt(start.replace('#', ''), 16)
+  rgb (hex) {
+    if (typeof hex === 'string') {
+      hex = hex.replace('#', '')
+      if (hex.length !== 3 && hex.length !== 6) throw new Error('Invalid hex color code provided')
+      if (hex.length === 3) hex = hex.replace(/[a-zA-Z0-9]/g, (match, offset, string) => string.charAt(offset).repeat(2))
+      hex = Number.parseInt(hex, 16)
+    }
     const clone = Object.create(this)
-    clone.red = (start >> 16) & 0xFF
-    clone.green = (start >> 8) & 0xFF
-    clone.blue = start & 0xFF
+    clone.red = (hex >> 16) & 0xFF
+    clone.green = (hex >> 8) & 0xFF
+    clone.blue = hex & 0xFF
     return clone
   },
   __limit (n) {
