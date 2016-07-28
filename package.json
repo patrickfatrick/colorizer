@@ -1,6 +1,6 @@
 {
   "name": "colorizer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A tiny library for performing Sass-like manipulations to hex color codes",
   "main": "index.js",
   "scripts": {
