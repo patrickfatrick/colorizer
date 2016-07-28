@@ -8,34 +8,22 @@ var colorizer = {
   multiply: function multiply(factor, rgb) {
     rgb = rgb || this;
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
-    var red = this.__format(rgb.red * factor);
-    var green = this.__format(rgb.green * factor);
-    var blue = this.__format(rgb.blue * factor);
-    return this.__pad(red.toString(16)) + this.__pad(green.toString(16)) + this.__pad(blue.toString(16));
+    return this.__combine(this.__formatAll(this.__applyMethod('multiply', factor, [rgb.red, rgb.green, rgb.blue])));
   },
   divide: function divide(factor, rgb) {
     rgb = rgb || this;
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
-    var red = this.__format(rgb.red / factor);
-    var green = this.__format(rgb.green / factor);
-    var blue = this.__format(rgb.blue / factor);
-    return this.__pad(red.toString(16)) + this.__pad(green.toString(16)) + this.__pad(blue.toString(16));
+    return this.__combine(this.__formatAll(this.__applyMethod('divide', factor, [rgb.red, rgb.green, rgb.blue])));
   },
   add: function add(factor, rgb) {
     rgb = rgb || this;
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
-    var red = this.__format(rgb.red + factor);
-    var green = this.__format(rgb.green + factor);
-    var blue = this.__format(rgb.blue + factor);
-    return this.__pad(red.toString(16)) + this.__pad(green.toString(16)) + this.__pad(blue.toString(16));
+    return this.__combine(this.__formatAll(this.__applyMethod('add', factor, [rgb.red, rgb.green, rgb.blue])));
   },
   subtract: function subtract(factor, rgb) {
     rgb = rgb || this;
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
-    var red = this.__format(rgb.red - factor);
-    var green = this.__format(rgb.green - factor);
-    var blue = this.__format(rgb.blue - factor);
-    return this.__pad(red.toString(16)) + this.__pad(green.toString(16)) + this.__pad(blue.toString(16));
+    return this.__combine(this.__formatAll(this.__applyMethod('subtract', factor, [rgb.red, rgb.green, rgb.blue])));
   },
   step: function step(method, factor, steps, rgb) {
     rgb = rgb || this;
@@ -49,10 +37,11 @@ var colorizer = {
   },
   rgb: function rgb(start) {
     if (typeof start === 'string') start = Number.parseInt(start.replace('#', ''), 16);
-    this.red = start >> 16 & 0xFF;
-    this.green = start >> 8 & 0xFF;
-    this.blue = start & 0xFF;
-    return this;
+    var clone = Object.create(this);
+    clone.red = start >> 16 & 0xFF;
+    clone.green = start >> 8 & 0xFF;
+    clone.blue = start & 0xFF;
+    return clone;
   },
   __limit: function __limit(n) {
     if (n > 255) return 255;
@@ -62,11 +51,45 @@ var colorizer = {
   __format: function __format(n) {
     return Math.round(this.__limit(n));
   },
+  __formatAll: function __formatAll(rgb) {
+    var _this = this;
+
+    return rgb.map(function (channel) {
+      return _this.__format(channel);
+    });
+  },
   __check: function __check(rgb) {
     if (typeof rgb.red !== 'number' || rgb.red > 255 || rgb.red < 0) return false;
     if (typeof rgb.green !== 'number' || rgb.green > 255 || rgb.green < 0) return false;
     if (typeof rgb.blue !== 'number' || rgb.blue > 255 || rgb.blue < 0) return false;
     return true;
+  },
+  __applyMethod: function __applyMethod(method, factor, rgb) {
+    switch (method) {
+      case 'multiply':
+        return rgb.map(function (channel) {
+          return channel * factor;
+        });
+      case 'divide':
+        return rgb.map(function (channel) {
+          return channel / factor;
+        });
+      case 'add':
+        return rgb.map(function (channel) {
+          return channel + factor;
+        });
+      case 'subtract':
+        return rgb.map(function (channel) {
+          return channel - factor;
+        });
+    }
+  },
+  __combine: function __combine(rgb) {
+    var _this2 = this;
+
+    return rgb.reduce(function (p, c) {
+      return p + _this2.__pad(c.toString(16));
+    }, '');
   },
   __pad: function __pad(v, chars, char) {
     chars = chars || 2;
