@@ -1,15 +1,15 @@
 # Harsh
 
-_A number-hash ready to go for Talk Like A Pirate Day._
-
-[![Circle CI](https://circleci.com/gh/patrickfatrick/harsh.svg?style=shield)](https://circleci.com/gh/patrickfatrick/harsh)
-[![codecov.io](https://codecov.io/github/patrickfatrick/harsh/coverage.svg?branch=master)](https://codecov.io/github/patrickfatrick/harsh?branch=master)
-[![bitHound Score](https://www.bithound.io/github/patrickfatrick/harsh/badges/score.svg)](https://www.bithound.io/github/patrickfatrick/harsh)
-[![bitHound Dependencies](https://www.bithound.io/github/patrickfatrick/harsh/badges/dependencies.svg)](https://www.bithound.io/github/patrickfatrick/harsh/master/dependencies/npm)
-[![MIT License][license-image]][license-url]
-
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+_A tiny library for performing Sass-like manipulations to hex color codes._
 
 ## What is it?
 
-Harsh is a tiny library for tokenizing lists of numbers, and then subsequently reversing those tokens back to the original numbers. You can also create a token from nothing by calling it with no arguments.
+Colorizer is a very small (3kb minified) library for handling color manipulation in much the same way as Sass. You can provide a hex code or RGB and then start multiplying, dividing, adding, or subtracting values from it (returning hex). You can also perform stepped calculations (e.g. multiply a hex code by 1.1 several times consecutively), returning an array of hex codes.
+
+Tests and improvements to come.
+
+## What's the plan?
+
+- Tests
+- Chaining methods
+- More better readme
