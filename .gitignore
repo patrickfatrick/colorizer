@@ -1,0 +1,12 @@
+#npm modules
+node_modules
+
+#DS_Store
+.DS_Store
+
+#debug
+npm-debug.log
+
+#coverage
+coverage
+.nyc_output

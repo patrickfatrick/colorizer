@@ -1,0 +1,27 @@
+{
+  "name": "colorizer",
+  "main": "index.js",
+  "version": "1.0.0",
+  "authors": [
+    "patrickfatrick <patrick.fricano@icloud.com>"
+  ],
+  "description": "A tiny library for performing Sass-like manipulations to hex color codes",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "Javascript",
+    "dates"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/patrickfatrick/colorizer",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "client/bower_components",
+    "test",
+    "tests"
+  ]
+}
