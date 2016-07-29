@@ -51,6 +51,10 @@ const colorizer = {
     clone.__rgb = rgb
     return clone
   },
+  luminance (rgb) {
+    rgb = rgb || this.__rgb
+    return 0.2126 * (rgb[0] / 255) + 0.7152 * (rgb[1] / 255) + 0.0722 * (rgb[2] / 255)
+  },
   __rgb: [0, 0, 0],
   __convertString (hex) {
     hex = hex.replace('#', '')
@@ -107,4 +111,8 @@ const colorizer = {
   }
 }
 
-module.exports = colorizer
+function Colorizer (hex) {
+  return colorizer.rgb(hex)
+}
+
+module.exports = Colorizer
