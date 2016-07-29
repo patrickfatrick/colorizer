@@ -24,14 +24,30 @@ var colorizer = {
   },
   step: function step(method, factor, steps, rgb) {
     rgb = rgb || this.__rgb;
-    console.log(rgb);
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
     if (typeof this[method] !== 'function') throw new Error('Invalid method provided');
-    var array = [this[method](factor, rgb)];
-    for (var i = 1; i < steps; i++) {
+    var array = [this.__combine(this.__formatAll(rgb))];
+    for (var i = 1; i < steps + 1; i++) {
       array.push(this.rgb(array[i - 1])[method](factor));
     }
     return array;
+  },
+  blend: function blend(color, steps, rgb) {
+    var _this = this;
+
+    rgb = rgb || this.__rgb;
+    if (typeof color === 'string') color = this.__convertString(color);
+    if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
+    var step = [(color[0] - rgb[0]) / steps, (color[0] - rgb[0]) / steps, (color[0] - rgb[0]) / steps];
+    var array = [rgb];
+    for (var i = 1; i < steps; i++) {
+      array.push([array[i - 1][0] + step[0], array[i - 1][1] + step[1], array[i - 1][2] + step[0]]);
+    }
+    array.push(color);
+    var converted = array.map(function (rgb) {
+      return _this.__combine(_this.__formatAll(rgb));
+    });
+    return converted;
   },
   rgb: function rgb(hex) {
     var rgb;
@@ -60,10 +76,10 @@ var colorizer = {
     return Math.round(this.__limit(n));
   },
   __formatAll: function __formatAll(rgb) {
-    var _this = this;
+    var _this2 = this;
 
     return rgb.map(function (channel) {
-      return _this.__format(channel);
+      return _this2.__format(channel);
     });
   },
   __check: function __check(rgb) {
@@ -102,10 +118,10 @@ var colorizer = {
     }
   },
   __combine: function __combine(rgb) {
-    var _this2 = this;
+    var _this3 = this;
 
     return rgb.reduce(function (p, c) {
-      return p + _this2.__pad(c.toString(16));
+      return p + _this3.__pad(c.toString(16));
     }, '');
   },
   __pad: function __pad(v, chars, char) {

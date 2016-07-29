@@ -25,11 +25,24 @@ const colorizer = {
     rgb = rgb || this.__rgb
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided')
     if (typeof this[method] !== 'function') throw new Error('Invalid method provided')
-    let array = [this[method](factor, rgb)]
-    for (let i = 1; i < steps; i++) {
+    let array = [this.__combine(this.__formatAll(rgb))]
+    for (let i = 1; i < steps + 1; i++) {
       array.push(this.rgb(array[i - 1])[method](factor))
     }
     return array
+  },
+  blend (color, steps, rgb) {
+    rgb = rgb || this.__rgb
+    if (typeof color === 'string') color = this.__convertString(color)
+    if (!this.__check(rgb)) throw new Error('Invalid RGB values provided')
+    let step = [(color[0] - rgb[0]) / steps, (color[1] - rgb[1]) / steps, (color[2] - rgb[2]) / steps]
+    let array = [rgb]
+    for (let i = 1; i < steps; i++) {
+      array.push([array[i - 1][0] + step[0], array[i - 1][1] + step[1], array[i - 1][2] + step[2]])
+    }
+    array.push(color)
+    const converted = array.map((rgb) => this.__combine(this.__formatAll(rgb)))
+    return converted
   },
   rgb (hex) {
     var rgb
