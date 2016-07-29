@@ -38,10 +38,10 @@ var colorizer = {
     rgb = rgb || this.__rgb;
     if (typeof color === 'string') color = this.__convertString(color);
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
-    var step = [(color[0] - rgb[0]) / steps, (color[0] - rgb[0]) / steps, (color[0] - rgb[0]) / steps];
+    var step = [(color[0] - rgb[0]) / steps, (color[1] - rgb[1]) / steps, (color[2] - rgb[2]) / steps];
     var array = [rgb];
     for (var i = 1; i < steps; i++) {
-      array.push([array[i - 1][0] + step[0], array[i - 1][1] + step[1], array[i - 1][2] + step[0]]);
+      array.push([array[i - 1][0] + step[0], array[i - 1][1] + step[1], array[i - 1][2] + step[2]]);
     }
     array.push(color);
     var converted = array.map(function (rgb) {
