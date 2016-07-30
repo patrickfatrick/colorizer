@@ -5,22 +5,30 @@ var colorizer = {
   multiply: function multiply(factor, rgb) {
     rgb = rgb || this.__rgb;
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
-    return this.__combine(this.__formatAll(this.__applyMethod('multiply', factor, [rgb[0], rgb[1], rgb[2]])));
+    var clone = Object.create(this);
+    clone.__rgb = this.__formatAll(this.__applyMethod('multiply', factor, [rgb[0], rgb[1], rgb[2]]));
+    return clone;
   },
   divide: function divide(factor, rgb) {
     rgb = rgb || this.__rgb;
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
-    return this.__combine(this.__formatAll(this.__applyMethod('divide', factor, [rgb[0], rgb[1], rgb[2]])));
+    var clone = Object.create(this);
+    clone.__rgb = this.__formatAll(this.__applyMethod('divide', factor, [rgb[0], rgb[1], rgb[2]]));
+    return clone;
   },
   add: function add(factor, rgb) {
     rgb = rgb || this.__rgb;
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
-    return this.__combine(this.__formatAll(this.__applyMethod('add', factor, [rgb[0], rgb[1], rgb[2]])));
+    var clone = Object.create(this);
+    clone.__rgb = this.__formatAll(this.__applyMethod('add', factor, [rgb[0], rgb[1], rgb[2]]));
+    return clone;
   },
   subtract: function subtract(factor, rgb) {
     rgb = rgb || this.__rgb;
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
-    return this.__combine(this.__formatAll(this.__applyMethod('subtract', factor, [rgb[0], rgb[1], rgb[2]])));
+    var clone = Object.create(this);
+    clone.__rgb = this.__formatAll(this.__applyMethod('subtract', factor, [rgb[0], rgb[1], rgb[2]]));
+    return clone;
   },
   step: function step(method, factor, steps, rgb) {
     rgb = rgb || this.__rgb;
@@ -28,7 +36,7 @@ var colorizer = {
     if (typeof this[method] !== 'function') throw new Error('Invalid method provided');
     var array = [this.__combine(this.__formatAll(rgb))];
     for (var i = 1; i < steps + 1; i++) {
-      array.push(this.rgb(array[i - 1])[method](factor));
+      array.push(this.rgb(array[i - 1])[method](factor).to('hex'));
     }
     return array;
   },
@@ -60,8 +68,51 @@ var colorizer = {
     rgb = rgb || this.__rgb;
     return 0.2126 * (rgb[0] / 255) + 0.7152 * (rgb[1] / 255) + 0.0722 * (rgb[2] / 255);
   },
+  to: function to(format, rgb) {
+    rgb = rgb || this.__rgb;
+    switch (format) {
+      case 'rgb':
+        return rgb;
+      case 'hex':
+        return this.__combine(rgb);
+      case 'hsl':
+        return this.__rgbToHsl(rgb);
+      default:
+        throw new Error('Invalid format provided.');
+    }
+  },
 
   __rgb: [0, 0, 0],
+  __rgbToHsl: function __rgbToHsl(rgb) {
+    var hue = void 0,
+        saturation = void 0,
+        lightness = void 0;
+    var r = rgb[0] / 255;
+    var g = rgb[1] / 255;
+    var b = rgb[2] / 255;
+    var min = Math.min(r, g, b);
+    var max = Math.max(r, g, b);
+    var diff = max - min;
+    lightness = (max + min) / 2;
+    if (diff === 0) hue = saturation = 0;else {
+      saturation = lightness < 0.5 ? diff / (max + min) : diff / (2 - max - min);
+      switch (max) {
+        case r:
+          hue = (g - b) / diff + (g < b ? 6 : 0);
+          break;
+        case g:
+          hue = (b - r) / diff + 2;
+          break;
+        case b:
+          hue = (r - g) / diff + 4;
+          break;
+      }
+      hue *= 60;
+      saturation *= 100;
+      lightness *= 100;
+    }
+    return [Math.round(hue), Math.round(saturation), Math.round(lightness)];
+  },
   __convertString: function __convertString(hex) {
     hex = hex.replace('#', '');
     if (hex.length !== 3 && hex.length !== 6) throw new Error('Invalid hex color code provided');
