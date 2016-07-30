@@ -1,43 +1,45 @@
 'use strict'
-
-const colorizer = {
+const ColorizerBase = {
+  init (hex) {
+    var rgb
+    if (typeof hex === 'string') rgb = this.__convertString(hex)
+    this.__rgb = rgb
+    return this
+  },
   multiply (factor, rgb) {
     rgb = rgb || this.__rgb
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided')
-    const clone = Object.create(this)
-    clone.__rgb = this.__formatAll(this.__applyMethod('multiply', factor, [rgb[0], rgb[1], rgb[2]]))
-    return clone
+    this.__rgb = this.__formatAll(this.__applyMethod('multiply', factor, [rgb[0], rgb[1], rgb[2]]))
+    return this
   },
   divide (factor, rgb) {
     rgb = rgb || this.__rgb
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided')
-    const clone = Object.create(this)
-    clone.__rgb = this.__formatAll(this.__applyMethod('divide', factor, [rgb[0], rgb[1], rgb[2]]))
-    return clone
+    this.__rgb = this.__formatAll(this.__applyMethod('divide', factor, [rgb[0], rgb[1], rgb[2]]))
+    return this
   },
   add (factor, rgb) {
     rgb = rgb || this.__rgb
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided')
-    const clone = Object.create(this)
-    clone.__rgb = this.__formatAll(this.__applyMethod('add', factor, [rgb[0], rgb[1], rgb[2]]))
-    return clone
+    this.__rgb = this.__formatAll(this.__applyMethod('add', factor, [rgb[0], rgb[1], rgb[2]]))
+    return this
   },
   subtract (factor, rgb) {
     rgb = rgb || this.__rgb
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided')
-    const clone = Object.create(this)
-    clone.__rgb = this.__formatAll(this.__applyMethod('subtract', factor, [rgb[0], rgb[1], rgb[2]]))
-    return clone
+    this.__rgb = this.__formatAll(this.__applyMethod('subtract', factor, [rgb[0], rgb[1], rgb[2]]))
+    return this
   },
   step (method, factor, steps, rgb) {
     rgb = rgb || this.__rgb
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided')
     if (typeof this[method] !== 'function') throw new Error('Invalid method provided')
-    let array = [this.__combine(this.__formatAll(rgb))]
+    let array = [rgb]
     for (let i = 1; i < steps + 1; i++) {
-      array.push(this.rgb(array[i - 1])[method](factor).to('hex'))
+      array.push(this.__applyMethod(method, factor, array[i - 1]))
     }
-    return array
+    const converted = array.map((rgb) => this.__combine(this.__formatAll(rgb)))
+    return converted
   },
   blend (color, steps, rgb) {
     rgb = rgb || this.__rgb
@@ -51,13 +53,6 @@ const colorizer = {
     array.push(color)
     const converted = array.map((rgb) => this.__combine(this.__formatAll(rgb)))
     return converted
-  },
-  rgb (hex) {
-    var rgb
-    if (typeof hex === 'string') rgb = this.__convertString(hex)
-    const clone = Object.create(this)
-    clone.__rgb = rgb
-    return clone
   },
   luminance (rgb) {
     rgb = rgb || this.__rgb
@@ -161,8 +156,8 @@ const colorizer = {
   }
 }
 
-function Colorizer (hex) {
-  return colorizer.rgb(hex)
+function Colorizer (color) {
+  return Object.create(ColorizerBase).init(color)
 }
 
 module.exports = Colorizer

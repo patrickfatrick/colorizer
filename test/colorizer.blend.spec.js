@@ -1,10 +1,15 @@
 import test from 'ava'
-import colorizer from '../index'
+import Colorizer from '../index'
+let color
+
+test.before((t) => {
+  color = Colorizer('#DA70D6')
+})
 
 test('can blend two colors', (t) => {
-  t.deepEqual(colorizer.rgb('#7c608f').blend('#ffffff', 10), ['7c608f', '89709a', '9680a5', 'a390b1', 'b0a0bc', 'bdb0c7', 'cbbfd2', 'd8cfdd', 'e5dfe9', 'f2eff4', 'ffffff'])
+  t.deepEqual(color.blend('#ffffff', 10), ['da70d6', 'de7eda', 'e18dde', 'e59be2', 'e9a9e6', 'ecb8ea', 'f0c6ef', 'f4d4f3', 'f8e2f7', 'fbf1fb', 'ffffff'])
 })
 
 test('can blend two colors reversed', (t) => {
-  t.deepEqual(colorizer.rgb('#ffffff').blend('#7c608f', 10), ['ffffff', 'f2eff4', 'e5dfe9', 'd8cfdd', 'cbbfd2', 'beafc7', 'b0a0bc', 'a390b1', '9680a5', '89709a', '7c608f'])
+  t.deepEqual(Colorizer('#fff').blend('#DA70D6', 10), ['ffffff', 'fbf1fb', 'f8e2f7', 'f4d4f3', 'f0c6ef', 'edb7eb', 'e9a9e6', 'e59be2', 'e18dde', 'de7eda', 'da70d6'])
 })

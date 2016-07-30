@@ -1,6 +1,11 @@
 import test from 'ava'
-import colorizer from '../index'
+import Colorizer from '../index'
+let color
+
+test.before((t) => {
+  color = Colorizer('#DA70D6')
+})
 
 test('can step any method', (t) => {
-  t.deepEqual(colorizer.rgb('#7c608f').step('multiply', 1.1, 10), ['7c608f', '886a9d', '9675ad', 'a581be', 'b68ed1', 'c89ce6', 'dcacfd', 'f2bdff', 'ffd0ff', 'ffe5ff', 'fffcff'])
+  t.deepEqual(color.step('multiply', 1.1, 10), ['da70d6', 'f07beb', 'ff88ff', 'ff95ff', 'ffa4ff', 'ffb4ff', 'ffc6ff', 'ffdaff', 'fff0ff', 'ffffff', 'ffffff'])
 })

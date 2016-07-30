@@ -1,47 +1,54 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.colorizer = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var colorizer = {
+var ColorizerBase = {
+  init: function init(hex) {
+    var rgb;
+    if (typeof hex === 'string') rgb = this.__convertString(hex);
+    this.__rgb = rgb;
+    return this;
+  },
   multiply: function multiply(factor, rgb) {
     rgb = rgb || this.__rgb;
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
-    var clone = Object.create(this);
-    clone.__rgb = this.__formatAll(this.__applyMethod('multiply', factor, [rgb[0], rgb[1], rgb[2]]));
-    return clone;
+    this.__rgb = this.__formatAll(this.__applyMethod('multiply', factor, [rgb[0], rgb[1], rgb[2]]));
+    return this;
   },
   divide: function divide(factor, rgb) {
     rgb = rgb || this.__rgb;
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
-    var clone = Object.create(this);
-    clone.__rgb = this.__formatAll(this.__applyMethod('divide', factor, [rgb[0], rgb[1], rgb[2]]));
-    return clone;
+    this.__rgb = this.__formatAll(this.__applyMethod('divide', factor, [rgb[0], rgb[1], rgb[2]]));
+    return this;
   },
   add: function add(factor, rgb) {
     rgb = rgb || this.__rgb;
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
-    var clone = Object.create(this);
-    clone.__rgb = this.__formatAll(this.__applyMethod('add', factor, [rgb[0], rgb[1], rgb[2]]));
-    return clone;
+    this.__rgb = this.__formatAll(this.__applyMethod('add', factor, [rgb[0], rgb[1], rgb[2]]));
+    return this;
   },
   subtract: function subtract(factor, rgb) {
     rgb = rgb || this.__rgb;
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
-    var clone = Object.create(this);
-    clone.__rgb = this.__formatAll(this.__applyMethod('subtract', factor, [rgb[0], rgb[1], rgb[2]]));
-    return clone;
+    this.__rgb = this.__formatAll(this.__applyMethod('subtract', factor, [rgb[0], rgb[1], rgb[2]]));
+    return this;
   },
   step: function step(method, factor, steps, rgb) {
+    var _this = this;
+
     rgb = rgb || this.__rgb;
     if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
     if (typeof this[method] !== 'function') throw new Error('Invalid method provided');
-    var array = [this.__combine(this.__formatAll(rgb))];
+    var array = [rgb];
     for (var i = 1; i < steps + 1; i++) {
-      array.push(this.rgb(array[i - 1])[method](factor).to('hex'));
+      array.push(this.__applyMethod(method, factor, array[i - 1]));
     }
-    return array;
+    var converted = array.map(function (rgb) {
+      return _this.__combine(_this.__formatAll(rgb));
+    });
+    return converted;
   },
   blend: function blend(color, steps, rgb) {
-    var _this = this;
+    var _this2 = this;
 
     rgb = rgb || this.__rgb;
     if (typeof color === 'string') color = this.__convertString(color);
@@ -53,16 +60,9 @@ var colorizer = {
     }
     array.push(color);
     var converted = array.map(function (rgb) {
-      return _this.__combine(_this.__formatAll(rgb));
+      return _this2.__combine(_this2.__formatAll(rgb));
     });
     return converted;
-  },
-  rgb: function rgb(hex) {
-    var rgb;
-    if (typeof hex === 'string') rgb = this.__convertString(hex);
-    var clone = Object.create(this);
-    clone.__rgb = rgb;
-    return clone;
   },
   luminance: function luminance(rgb) {
     rgb = rgb || this.__rgb;
@@ -131,10 +131,10 @@ var colorizer = {
     return Math.round(this.__limit(n));
   },
   __formatAll: function __formatAll(rgb) {
-    var _this2 = this;
+    var _this3 = this;
 
     return rgb.map(function (channel) {
-      return _this2.__format(channel);
+      return _this3.__format(channel);
     });
   },
   __check: function __check(rgb) {
@@ -173,10 +173,10 @@ var colorizer = {
     }
   },
   __combine: function __combine(rgb) {
-    var _this3 = this;
+    var _this4 = this;
 
     return rgb.reduce(function (p, c) {
-      return p + _this3.__pad(c.toString(16));
+      return p + _this4.__pad(c.toString(16));
     }, '');
   },
   __pad: function __pad(v, chars, char) {
@@ -186,8 +186,8 @@ var colorizer = {
   }
 };
 
-function Colorizer(hex) {
-  return colorizer.rgb(hex);
+function Colorizer(color) {
+  return Object.create(ColorizerBase).init(color);
 }
 
 module.exports = Colorizer;
