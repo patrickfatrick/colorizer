@@ -1,39 +1,34 @@
 'use strict'
+
 const ColorizerBase = {
-  init (hex) {
-    var rgb
-    if (typeof hex === 'string') rgb = this.__convertString(hex)
-    this.__rgb = rgb
+  init (color) {
+    if (typeof color === 'string') color = this.__convertString(color)
+    if (!this.__check(color)) throw new Error('Invalid color provided')
+    this.__rgb = color
     return this
   },
-  multiply (factor, rgb) {
-    rgb = rgb || this.__rgb
-    if (!this.__check(rgb)) throw new Error('Invalid RGB values provided')
+  multiply (factor) {
+    const rgb = this.__rgb
     this.__rgb = this.__formatAll(this.__applyMethod('multiply', factor, [rgb[0], rgb[1], rgb[2]]))
     return this
   },
-  divide (factor, rgb) {
-    rgb = rgb || this.__rgb
-    if (!this.__check(rgb)) throw new Error('Invalid RGB values provided')
+  divide (factor) {
+    const rgb = this.__rgb
     this.__rgb = this.__formatAll(this.__applyMethod('divide', factor, [rgb[0], rgb[1], rgb[2]]))
     return this
   },
-  add (factor, rgb) {
-    rgb = rgb || this.__rgb
-    if (!this.__check(rgb)) throw new Error('Invalid RGB values provided')
+  add (factor) {
+    const rgb = this.__rgb
     this.__rgb = this.__formatAll(this.__applyMethod('add', factor, [rgb[0], rgb[1], rgb[2]]))
     return this
   },
-  subtract (factor, rgb) {
-    rgb = rgb || this.__rgb
-    if (!this.__check(rgb)) throw new Error('Invalid RGB values provided')
+  subtract (factor) {
+    const rgb = this.__rgb
     this.__rgb = this.__formatAll(this.__applyMethod('subtract', factor, [rgb[0], rgb[1], rgb[2]]))
     return this
   },
-  step (method, factor, steps, rgb) {
-    rgb = rgb || this.__rgb
-    if (!this.__check(rgb)) throw new Error('Invalid RGB values provided')
-    if (typeof this[method] !== 'function') throw new Error('Invalid method provided')
+  step (method, factor, steps) {
+    const rgb = this.__rgb
     let array = [rgb]
     for (let i = 1; i < steps + 1; i++) {
       array.push(this.__applyMethod(method, factor, array[i - 1]))
@@ -41,10 +36,9 @@ const ColorizerBase = {
     const converted = array.map((rgb) => this.__combine(this.__formatAll(rgb)))
     return converted
   },
-  blend (color, steps, rgb) {
-    rgb = rgb || this.__rgb
+  blend (color, steps) {
+    const rgb = this.__rgb
     if (typeof color === 'string') color = this.__convertString(color)
-    if (!this.__check(rgb)) throw new Error('Invalid RGB values provided')
     let step = [(color[0] - rgb[0]) / steps, (color[1] - rgb[1]) / steps, (color[2] - rgb[2]) / steps]
     let array = [rgb]
     for (let i = 1; i < steps; i++) {
@@ -54,12 +48,12 @@ const ColorizerBase = {
     const converted = array.map((rgb) => this.__combine(this.__formatAll(rgb)))
     return converted
   },
-  luminance (rgb) {
-    rgb = rgb || this.__rgb
+  luminance () {
+    const rgb = this.__rgb
     return 0.2126 * (rgb[0] / 255) + 0.7152 * (rgb[1] / 255) + 0.0722 * (rgb[2] / 255)
   },
-  to (format, rgb) {
-    rgb = rgb || this.__rgb
+  to (format) {
+    const rgb = this.__rgb
     switch (format) {
       case 'rgb':
         return rgb
@@ -67,6 +61,8 @@ const ColorizerBase = {
         return this.__combine(rgb)
       case 'hsl':
         return this.__rgbToHsl(rgb)
+      case 'luminance':
+        return this.luminance()
       default:
         throw new Error('Invalid format provided.')
     }
@@ -95,11 +91,8 @@ const ColorizerBase = {
           hue = (r - g) / diff + 4
           break
       }
-      hue *= 60
-      saturation *= 100
-      lightness *= 100
     }
-    return [Math.round(hue), Math.round(saturation), Math.round(lightness)]
+    return [Math.round(hue * 60), Math.round(saturation * 100), Math.round(lightness * 100)]
   },
   __convertString (hex) {
     hex = hex.replace('#', '')
@@ -134,7 +127,7 @@ const ColorizerBase = {
   __applyMethod (method, factor, rgb) {
     factor = this.__formatFactor(factor)
     if (factor === false) throw new Error('Invalid factor provided')
-    var numProvided = typeof factor === 'number'
+    const numProvided = typeof factor === 'number'
     switch (method) {
       case 'multiply':
         return rgb.map((channel, i) => channel * ((numProvided) ? factor : factor[i]))
@@ -144,6 +137,8 @@ const ColorizerBase = {
         return rgb.map((channel, i) => channel + ((numProvided) ? factor : factor[i]))
       case 'subtract':
         return rgb.map((channel, i) => channel - ((numProvided) ? factor : factor[i]))
+      default:
+        throw new Error('Invalid method provided')
     }
   },
   __combine (rgb) {

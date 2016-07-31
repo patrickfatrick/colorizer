@@ -2,6 +2,10 @@ import test from 'ava'
 import Colorizer from '../index'
 let color
 
+/**
+ * DA70D6 => 218, 112, 214
+ */
+
 test.before((t) => {
   color = Colorizer('#DA70D6')
 })

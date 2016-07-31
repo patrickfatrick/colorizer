@@ -2,12 +2,21 @@ import test from 'ava'
 import Colorizer from '../index'
 let color
 
+/**
+ * DA70D6 => 218, 112, 214
+ * FFF => 255, 255, 255
+ */
+
 test.before((t) => {
   color = Colorizer('#DA70D6')
 })
 
-test('can blend two colors', (t) => {
+test('can blend two colors (hex)', (t) => {
   t.deepEqual(color.blend('#ffffff', 10), ['da70d6', 'de7eda', 'e18dde', 'e59be2', 'e9a9e6', 'ecb8ea', 'f0c6ef', 'f4d4f3', 'f8e2f7', 'fbf1fb', 'ffffff'])
+})
+
+test('can blend two colors (rgb)', (t) => {
+  t.deepEqual(color.blend([255, 255, 255], 10), ['da70d6', 'de7eda', 'e18dde', 'e59be2', 'e9a9e6', 'ecb8ea', 'f0c6ef', 'f4d4f3', 'f8e2f7', 'fbf1fb', 'ffffff'])
 })
 
 test('can blend two colors reversed', (t) => {

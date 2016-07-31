@@ -1,7 +1,7 @@
 {
   "name": "colorizer",
   "main": "index.js",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "authors": [
     "patrickfatrick <patrick.fricano@icloud.com>"
   ],
