@@ -27,6 +27,10 @@ test('multiplies color by another color (rgb)', (t) => {
   t.deepEqual(color.divide([0, 176, 255]).__rgb, [255, 1, 1])
 })
 
+test('is chainable', (t) => {
+  t.deepEqual(color.divide(1.1).divide(1.1).__rgb, [180, 93, 177])
+})
+
 test('throws an error on invalid factor', (t) => {
   t.throws(() => color.divide([260, 0, 0]).__rgb, Error, 'Invalid factor provided')
 })

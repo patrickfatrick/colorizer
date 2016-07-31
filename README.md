@@ -63,33 +63,41 @@ color.to('luminance') // 0.556470588235294, no rounding is applied
 
 ## Manipulations
 
-You can add, subtract, multiply, and divide values
+You can add, subtract, multiply, and divide values. These return the instance rather than the color, so you can chain methods together (see below). You will have to combine this with `to` to receive a color at the end.
 
 ```javascript
-color.add(50) // [255, 162, 255]
-color.subtract(50) // [168, 62, 164]
-color.multiply(1.1) // [240, 123, 235]
-color.divide(1.1) // [198, 102, 195]
+color.add(50).to('rgb') // [255, 162, 255]
+color.subtract(50).to('rgb') // [168, 62, 164]
+color.multiply(1.1).to('rgb') // [240, 123, 235]
+color.divide(1.1).to('rgb') // [198, 102, 195]
 ```
 
 You can add, subtract, multiply, and divde other colors
 
 ```javascript
-color.add('00b0ff') // [218, 255, 255]
-color.subtract('00b0ff') // [218, 0, 0]
-color.multiply('00b0ff') // [0, 255, 255]
-color.divide('00b0ff') // [255, 1, 1]
+color.add('00b0ff').to('rgb') // [218, 255, 255]
+color.subtract('00b0ff').to('rgb') // [218, 0, 0]
+color.multiply('00b0ff').to('rgb') // [0, 255, 255]
+color.divide('00b0ff').to('rgb') // [255, 1, 1]
+```
+
+You can chain these methods together
+
+```javascript
+color.add(50).multiply(1.1).to('rgb') // [255, 178, 255]
 ```
 
 ## Stepped manipulations
 
-You can perform any of the manipulations in a stepped fashion, like so
+You can perform any of the manipulations in a stepped, non-chainable fashion, like so
 
 ```javascript
 color.step('multiply', 1.1, 10) // ['da70d6', 'f07beb', 'ff88ff', 'ff95ff', 'ffa4ff', 'ffb4ff', 'ffc6ff', 'ffdaff', 'fff0ff', 'ffffff', 'ffffff']
-// Notice that the first color in the array is the original color
-// This method always returns hex, for now
 ```
+
+Notice that the first color in the array is the original color.
+
+This method always returns hex, for now.
 
 ## Blending colors
 
@@ -97,9 +105,11 @@ You can create a gradient by performing a blend operation, returning a specified
 
 ```javascript
 color.blend('fff', 10) // ['da70d6', 'de7eda', 'e18dde', 'e59be2', 'e9a9e6', 'ecb8ea', 'f0c6ef', 'f4d4f3', 'f8e2f7', 'fbf1fb', 'ffffff']
-// First color returned is the original here as well, and the last is the one passed in
-// Also returns hex for the time being
 ```
+
+First color returned is the original here as well, and the last is the one passed in.
+
+Also returns hex for the time being. Also not chainable.
 
 ## Running the tests
 

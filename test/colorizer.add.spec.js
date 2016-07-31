@@ -27,6 +27,10 @@ test('adds color by another color (rgb)', (t) => {
   t.deepEqual(color.add([0, 176, 255]).__rgb, [218, 255, 255])
 })
 
+test('is chainable', (t) => {
+  t.deepEqual(color.add(50).add(10).__rgb, [255, 172, 255])
+})
+
 test('throws an error on invalid factor', (t) => {
   t.throws(() => color.add([0, 260, 0]).__rgb, Error, 'Invalid factor provided')
 })

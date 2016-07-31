@@ -27,6 +27,10 @@ test('subtracts color by another color (rgb)', (t) => {
   t.deepEqual(color.subtract([0, 176, 255]).__rgb, [218, 0, 0])
 })
 
+test('is chainable', (t) => {
+  t.deepEqual(color.subtract(50).subtract(10).__rgb, [158, 52, 154])
+})
+
 test('throws an error on invalid factor', (t) => {
   t.throws(() => color.subtract([-1, -1, -1]).__rgb, Error, 'Invalid factor provided')
 })
