@@ -1,7 +1,7 @@
 {
   "name": "colorizer",
   "version": "1.1.0",
-  "description": "A tiny library for performing Sass-like manipulations to hex color codes",
+  "description": "A tiny library for performing manipulations and conversions to colors",
   "main": "index.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test node_modules/.bin/nyc ava --tap | node_modules/.bin/faucet",

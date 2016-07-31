@@ -5,7 +5,7 @@
   "authors": [
     "patrickfatrick <patrick.fricano@icloud.com>"
   ],
-  "description": "A tiny library for performing Sass-like manipulations to hex color codes",
+  "description": "A tiny library for performing manipulations and conversions to colors",
   "moduleType": [
     "globals",
     "node"
