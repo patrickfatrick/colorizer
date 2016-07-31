@@ -2,42 +2,36 @@
 'use strict';
 
 var ColorizerBase = {
-  init: function init(hex) {
-    var rgb;
-    if (typeof hex === 'string') rgb = this.__convertString(hex);
-    this.__rgb = rgb;
+  init: function init(color) {
+    if (typeof color === 'string') color = this.__convertString(color);
+    if (!this.__check(color)) throw new Error('Invalid color provided');
+    this.__rgb = color;
     return this;
   },
-  multiply: function multiply(factor, rgb) {
-    rgb = rgb || this.__rgb;
-    if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
+  multiply: function multiply(factor) {
+    var rgb = this.__rgb;
     this.__rgb = this.__formatAll(this.__applyMethod('multiply', factor, [rgb[0], rgb[1], rgb[2]]));
     return this;
   },
-  divide: function divide(factor, rgb) {
-    rgb = rgb || this.__rgb;
-    if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
+  divide: function divide(factor) {
+    var rgb = this.__rgb;
     this.__rgb = this.__formatAll(this.__applyMethod('divide', factor, [rgb[0], rgb[1], rgb[2]]));
     return this;
   },
-  add: function add(factor, rgb) {
-    rgb = rgb || this.__rgb;
-    if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
+  add: function add(factor) {
+    var rgb = this.__rgb;
     this.__rgb = this.__formatAll(this.__applyMethod('add', factor, [rgb[0], rgb[1], rgb[2]]));
     return this;
   },
-  subtract: function subtract(factor, rgb) {
-    rgb = rgb || this.__rgb;
-    if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
+  subtract: function subtract(factor) {
+    var rgb = this.__rgb;
     this.__rgb = this.__formatAll(this.__applyMethod('subtract', factor, [rgb[0], rgb[1], rgb[2]]));
     return this;
   },
-  step: function step(method, factor, steps, rgb) {
+  step: function step(method, factor, steps) {
     var _this = this;
 
-    rgb = rgb || this.__rgb;
-    if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
-    if (typeof this[method] !== 'function') throw new Error('Invalid method provided');
+    var rgb = this.__rgb;
     var array = [rgb];
     for (var i = 1; i < steps + 1; i++) {
       array.push(this.__applyMethod(method, factor, array[i - 1]));
@@ -47,12 +41,11 @@ var ColorizerBase = {
     });
     return converted;
   },
-  blend: function blend(color, steps, rgb) {
+  blend: function blend(color, steps) {
     var _this2 = this;
 
-    rgb = rgb || this.__rgb;
+    var rgb = this.__rgb;
     if (typeof color === 'string') color = this.__convertString(color);
-    if (!this.__check(rgb)) throw new Error('Invalid RGB values provided');
     var step = [(color[0] - rgb[0]) / steps, (color[1] - rgb[1]) / steps, (color[2] - rgb[2]) / steps];
     var array = [rgb];
     for (var i = 1; i < steps; i++) {
@@ -64,12 +57,12 @@ var ColorizerBase = {
     });
     return converted;
   },
-  luminance: function luminance(rgb) {
-    rgb = rgb || this.__rgb;
+  luminance: function luminance() {
+    var rgb = this.__rgb;
     return 0.2126 * (rgb[0] / 255) + 0.7152 * (rgb[1] / 255) + 0.0722 * (rgb[2] / 255);
   },
-  to: function to(format, rgb) {
-    rgb = rgb || this.__rgb;
+  to: function to(format) {
+    var rgb = this.__rgb;
     switch (format) {
       case 'rgb':
         return rgb;
@@ -77,6 +70,8 @@ var ColorizerBase = {
         return this.__combine(rgb);
       case 'hsl':
         return this.__rgbToHsl(rgb);
+      case 'luminance':
+        return this.luminance();
       default:
         throw new Error('Invalid format provided.');
     }
@@ -107,11 +102,8 @@ var ColorizerBase = {
           hue = (r - g) / diff + 4;
           break;
       }
-      hue *= 60;
-      saturation *= 100;
-      lightness *= 100;
     }
-    return [Math.round(hue), Math.round(saturation), Math.round(lightness)];
+    return [Math.round(hue * 60), Math.round(saturation * 100), Math.round(lightness * 100)];
   },
   __convertString: function __convertString(hex) {
     hex = hex.replace('#', '');
@@ -170,6 +162,8 @@ var ColorizerBase = {
         return rgb.map(function (channel, i) {
           return channel - (numProvided ? factor : factor[i]);
         });
+      default:
+        throw new Error('Invalid method provided');
     }
   },
   __combine: function __combine(rgb) {
