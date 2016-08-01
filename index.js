@@ -1,13 +1,14 @@
 'use strict'
 
 const ColorizerBase = {
-  init (color, flag) {
-    if (flag === 'hsl') {
+  init (color, hsl) {
+    if (hsl) {
+      if (!this.__checkHsl(color)) throw new Error('Invalid color provided')
       this.__rgb = this.__hslToRgb(color)
       return this
     }
     if (typeof color === 'string') color = this.__convertString(color)
-    if (!this.__check(color)) throw new Error('Invalid color provided')
+    if (!this.__checkRgb(color)) throw new Error('Invalid color provided')
     this.__rgb = color
     return this
   },
@@ -165,16 +166,22 @@ const ColorizerBase = {
   __formatAll (rgb) {
     return rgb.map((channel) => this.__format(channel))
   },
-  __check (rgb) {
+  __checkRgb (rgb) {
     if (typeof rgb[0] !== 'number' || rgb[0] > 255 || rgb[0] < 0) return false
     if (typeof rgb[1] !== 'number' || rgb[1] > 255 || rgb[1] < 0) return false
     if (typeof rgb[2] !== 'number' || rgb[2] > 255 || rgb[2] < 0) return false
     return true
   },
+  __checkHsl (hsl) {
+    if (typeof hsl[0] !== 'number' || hsl[0] > 359 || hsl[0] < 0) return false
+    if (typeof hsl[1] !== 'number' || hsl[1] > 100 || hsl[1] < 0) return false
+    if (typeof hsl[2] !== 'number' || hsl[2] > 100 || hsl[2] < 0) return false
+    return true
+  },
   __formatFactor (factor) {
     if (typeof factor === 'number') return factor
     if (typeof factor === 'string') return this.__convertString(factor)
-    if (Array.isArray(factor)) return (this.__check(factor)) ? factor : false
+    if (Array.isArray(factor)) return (this.__checkRgb(factor)) ? factor : false
     return false
   },
   __applyMethod (method, factor, rgb) {

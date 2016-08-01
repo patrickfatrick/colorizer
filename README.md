@@ -49,8 +49,10 @@ const color = Colorizer('DA70D6') // Hex, without hash
 const color = Colorizer('da70d6') // It can be upper- or lower-cased to your heart's content
 const color = Colorizer('fff') // You can also do this like in CSS
 const color = Colorizer([218, 112, 214]) // RGB, in the form of an array
-const color = Colorizer([302, 59, 65], 'hsl') // Set the hsl flag as your second parameter for that
+const color = Colorizer([302, 59, 65], true) // Set the hsl flag as your second parameter to use that
 ```
+
+The first argument should be the color to start with, the second argument is a boolean to indicate your color is going to be HSL.
 
 ## Converting or returning a color
 
