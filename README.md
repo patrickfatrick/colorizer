@@ -25,6 +25,10 @@ Colorizer is a very small (5kb minified) library for handling color manipulation
 
 ## Changelog
 
+#### v1.2.0
+
+HSL is now a first-class citizen. You can start with a color in HSL colorspace and do all the usual manipulations. Additionally you can adjust any color (no matter what space you start with) via HSL attributes. Set and adjust hue, saturation, and lightness to your heart's content!
+
 #### v1.1.0
 
 Testing, readme, API stabilised.
@@ -52,7 +56,7 @@ const color = Colorizer([218, 112, 214]) // RGB, in the form of an array
 const color = Colorizer([302, 59, 65], true) // Set the hsl flag as your second parameter to use that
 ```
 
-The first argument should be the color to start with, the second argument is a boolean to indicate your color is going to be HSL.
+The first argument should be the color to start with, the second argument is a boolean to indicate if your color is going to be HSL. From here you can perform any calculations, blending, stepping, or HSL adjustments, no matter which colorspace you start with.
 
 ## Converting or returning a color
 
