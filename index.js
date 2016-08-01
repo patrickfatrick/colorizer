@@ -1,7 +1,11 @@
 'use strict'
 
 const ColorizerBase = {
-  init (color) {
+  init (color, flag) {
+    if (flag === 'hsl') {
+      this.__rgb = this.__hslToRgb(color)
+      return this
+    }
     if (typeof color === 'string') color = this.__convertString(color)
     if (!this.__check(color)) throw new Error('Invalid color provided')
     this.__rgb = color
@@ -52,6 +56,30 @@ const ColorizerBase = {
     const rgb = this.__rgb
     return 0.2126 * (rgb[0] / 255) + 0.7152 * (rgb[1] / 255) + 0.0722 * (rgb[2] / 255)
   },
+  setHue (value) {
+    this.__rgb = this.__setHsl(0, this.__rgb, value)
+    return this
+  },
+  adjustHue (factor) {
+    this.__rgb = this.__adjustHsl(0, this.__rgb, factor)
+    return this
+  },
+  setSaturation (value) {
+    this.__rgb = this.__setHsl(1, this.__rgb, value)
+    return this
+  },
+  adjustSaturation (factor) {
+    this.__rgb = this.__adjustHsl(1, this.__rgb, factor)
+    return this
+  },
+  setLightness (value) {
+    this.__rgb = this.__setHsl(2, this.__rgb, value)
+    return this
+  },
+  adjustLightness (factor) {
+    this.__rgb = this.__adjustHsl(2, this.__rgb, factor)
+    return this
+  },
   to (format) {
     const rgb = this.__rgb
     switch (format) {
@@ -94,6 +122,31 @@ const ColorizerBase = {
     }
     return [Math.round(hue * 60), Math.round(saturation * 100), Math.round(lightness * 100)]
   },
+  __hslToRgb (hsl) {
+    const h = hsl[0] / 360
+    const s = hsl[1] / 100
+    const l = hsl[2] / 100
+    let r, g, b
+    if (s === 0) {
+      r = g = b = l
+    } else {
+      var q = l < 0.5 ? l * (1 + s) : l + s - l * s
+      var p = 2 * l - q
+      r = this.__hueToRgb(p, q, h + 1 / 3)
+      g = this.__hueToRgb(p, q, h)
+      b = this.__hueToRgb(p, q, h - 1 / 3)
+    }
+
+    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)]
+  },
+  __hueToRgb (p, q, t) {
+    if (t < 0) t += 1
+    if (t > 1) t -= 1
+    if (t < 1 / 6) return p + (q - p) * 6 * t
+    if (t < 1 / 2) return q
+    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6
+    return p
+  },
   __convertString (hex) {
     hex = hex.replace('#', '')
     if (hex.length !== 3 && hex.length !== 6) throw new Error('Invalid hex color code provided')
@@ -101,13 +154,13 @@ const ColorizerBase = {
     hex = Number.parseInt(hex, 16)
     return [(hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0xFF]
   },
-  __limit (n) {
-    if (n > 255) return 255
-    if (n < 0) return 0
+  __normalize (n, upper, lower) {
+    if (n > upper) return upper
+    if (n < lower) return lower
     return n
   },
   __format (n) {
-    return Math.round(this.__limit(n))
+    return Math.round(this.__normalize(n, 255, 0))
   },
   __formatAll (rgb) {
     return rgb.map((channel) => this.__format(channel))
@@ -148,11 +201,24 @@ const ColorizerBase = {
     chars = chars || 2
     char = char || 0
     return (v.length < chars) ? char.toString().repeat(Number.parseInt(chars) - v.length) + v : v
+  },
+  __setHsl (which, rgb, value) {
+    if (typeof value !== 'number') throw new Error('Invalid HSL value provided')
+    const hsl = this.__rgbToHsl(rgb)
+    hsl[which] = this.__normalize(value, ((which === 0) ? 359 : 100), 0)
+    return this.__hslToRgb(hsl)
+  },
+  __adjustHsl (which, rgb, factor) {
+    if (typeof factor !== 'number') throw new Error('Invalid factor provided')
+    const hsl = this.__rgbToHsl(rgb)
+    hsl[which] += factor
+    hsl[which] = this.__normalize(hsl[which], ((which === 0) ? 359 : 100), 0)
+    return this.__hslToRgb(hsl)
   }
 }
 
-function Colorizer (color) {
-  return Object.create(ColorizerBase).init(color)
+function Colorizer (color, flag) {
+  return Object.create(ColorizerBase).init(color, flag)
 }
 
 module.exports = Colorizer

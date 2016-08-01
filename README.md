@@ -12,13 +12,14 @@ _A tiny library for performing manipulations and conversions to colors._
 
 ## What is it?
 
-Colorizer is a very small (4kb minified) library for handling color manipulation and conversion. It was inspired by what you can do in Sass so a lot of the same functionality is here. Given a hex or RGB color you can:
+Colorizer is a very small (5kb minified) library for handling color manipulation and conversion. It was inspired by what you can do in Sass so a lot of the same functionality is here. Given a hex or RGB color you can:
 
 - Add, subtract, divide, and multiply vales
 - Add, subtract, divide and multiply other colors
 - Performed stepped calculations for any of the operations listed above
 - Chain any of the math operations together
 - Blend two colors together and receive a specified number of gradient steps
+- Adjust and set HSL values
 - Convert it to RGB, hex, or hsl
 - Get the luminance
 
@@ -48,6 +49,7 @@ const color = Colorizer('DA70D6') // Hex, without hash
 const color = Colorizer('da70d6') // It can be upper- or lower-cased to your heart's content
 const color = Colorizer('fff') // You can also do this like in CSS
 const color = Colorizer([218, 112, 214]) // RGB, in the form of an array
+const color = Colorizer([302, 59, 65], 'hsl') // Set the hsl flag as your second parameter for that
 ```
 
 ## Converting or returning a color
@@ -110,6 +112,21 @@ color.blend('fff', 10) // ['da70d6', 'de7eda', 'e18dde', 'e59be2', 'e9a9e6', 'ec
 First color returned is the original here as well, and the last is the one passed in.
 
 Also returns hex for the time being. Also not chainable.
+
+## Setting and adjusting HSL values
+
+In addition to all of that you can now manipulate the hue, saturation, and lightness of the color directly. The methods follow these patterns
+
+```javascript
+color.setHue(100).to('rgb') // [148, 218, 113]
+color.adjustHue(-202).to('rgb') // [148, 218, 113]
+color.setSaturation(50).to('rgb') // [210, 121, 207]
+color.adjustSaturation(-9).to('rgb') // [210, 121, 207]
+color.setLightness(50).to('rgb') // [203, 52, 198]
+color.adjustLightness(-15).to('rgb') // [203, 52, 198]
+```
+
+These methods are chainable either with other HSL manipulation methods or with the add/subtract/multiply/divide methods.
 
 ## Running the tests
 
