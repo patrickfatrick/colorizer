@@ -163,7 +163,7 @@ var ColorizerBase = {
   },
   __convertString: function __convertString(hex) {
     hex = hex.replace('#', '');
-    if (hex.length !== 3 && hex.length !== 6) throw new Error('Invalid hex color code provided');
+    if (!/^([0-9a-fA-F]{3})(\1|[0-9a-fA-F]{3})?$/.test(hex)) throw new Error('Invalid hex color code provided');
     if (hex.length === 3) hex = hex.replace(/[a-zA-Z0-9]/g, function (match, offset, string) {
       return string.charAt(offset).repeat(2);
     });
@@ -186,15 +186,17 @@ var ColorizerBase = {
     });
   },
   __checkRgb: function __checkRgb(rgb) {
-    if (typeof rgb[0] !== 'number' || rgb[0] > 255 || rgb[0] < 0) return false;
-    if (typeof rgb[1] !== 'number' || rgb[1] > 255 || rgb[1] < 0) return false;
-    if (typeof rgb[2] !== 'number' || rgb[2] > 255 || rgb[2] < 0) return false;
+    if (rgb.length !== 3) return false;
+    for (var i = 0; i < rgb.length; i++) {
+      if (typeof rgb[i] !== 'number' || rgb[i] > 255 || rgb[i] < 0) return false;
+    }
     return true;
   },
   __checkHsl: function __checkHsl(hsl) {
-    if (typeof hsl[0] !== 'number' || hsl[0] > 359 || hsl[0] < 0) return false;
-    if (typeof hsl[1] !== 'number' || hsl[1] > 100 || hsl[1] < 0) return false;
-    if (typeof hsl[2] !== 'number' || hsl[2] > 100 || hsl[2] < 0) return false;
+    if (hsl.length !== 3) return false;
+    for (var i = 0; i < hsl.length; i++) {
+      if (typeof hsl[i] !== 'number' || hsl[i] > (i === 0 ? 359 : 100) || hsl[i] < 0) return false;
+    }
     return true;
   },
   __formatFactor: function __formatFactor(factor) {
