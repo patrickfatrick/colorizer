@@ -12,7 +12,7 @@ _A tiny library for performing manipulations and conversions to colors._
 
 ## What is it?
 
-Colorizer is a very small (5kb minified) library for handling color manipulation and conversion. It was inspired by what you can do in Sass so a lot of the same functionality is here. Given a hex or RGB color you can:
+Colorizer is a very small (5kb minified) library for handling color manipulation and conversion. It was inspired by what you can do in Sass so a lot of the same functionality is here. Given a color in hex, RGB, or HSL, you can:
 
 - Add, subtract, divide, and multiply vales
 - Add, subtract, divide and multiply other colors
@@ -145,7 +145,6 @@ $ npm test
 
 ## What's the plan?
 
-- Init with an HSL color
 - Possibly convert to even more formats
 - Return any format for the stepped and blended operations
 
