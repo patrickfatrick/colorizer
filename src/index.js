@@ -20,6 +20,7 @@ import {
 } from './modules/rgb-transforms'
 import {
   convertRgbToHex,
+  convertRgbToHexWithHash,
   convertHexToRgb,
   convertHslToRgb,
   convertRgbToHsl,
@@ -43,6 +44,7 @@ export {
   isValidHsl,
   isValidColor,
   convertRgbToHex,
+  convertRgbToHexWithHash,
   convertHexToRgb,
   convertHslToRgb,
   convertRgbToHsl,

@@ -30,5 +30,5 @@ export function isValidHsl (hsl) {
  * @return {Boolean}     whether or not the string matches hex color constraints
  */
 export function isValidHex (hex) {
-  return /^([0-9a-fA-F]{3})(\1|[0-9a-fA-F]{3})?$/.test(hex)
+  return /^#?([0-9a-fA-F]{3})(\1|[0-9a-fA-F]{3})?$/.test(hex)
 }

@@ -1,7 +1,8 @@
 {
   "name": "colorizer",
-  "main": "index.js",
-  "version": "2.0.0",
+  "main": "dist/colorizer.umd.js",
+  "module": "dist/colorizer.js",
+  "version": "2.0.1",
   "authors": [
     "patrickfatrick <patrick.fricano@icloud.com>"
   ],

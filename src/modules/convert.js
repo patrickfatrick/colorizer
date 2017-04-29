@@ -9,6 +9,15 @@ export {
 }
 
 /**
+ * Convert rgb to hex but prepending a hash symbol for easy CSS insertion
+ * @param  {Array}  input array of rgb values
+ * @return {String}       hex string with hash at the start
+ */
+export function convertRgbToHexWithHash (input) {
+  return `#${convertRgbToHex(input)}`
+}
+
+/**
  * Returns th luminance for the hex color provided via RGB conversion
  * @param  {String} input  a color in hex format
  * @return {Number}        the un-rounded luminance value between 0 and 1

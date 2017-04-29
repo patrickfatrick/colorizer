@@ -10,7 +10,7 @@ test('returns true for valid three-character hex color ', (t) => {
 })
 
 test('returns false for valid hex color with hash', (t) => {
-  t.false(isValidHex('#da70d6'))
+  t.true(isValidHex('#da70d6'))
 })
 
 test('returns false if any characters outside hex bounds', (t) => {

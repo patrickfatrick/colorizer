@@ -30,7 +30,7 @@ function isValidHsl(hsl) {
  * @return {Boolean}     whether or not the string matches hex color constraints
  */
 function isValidHex(hex) {
-  return (/^([0-9a-fA-F]{3})(\1|[0-9a-fA-F]{3})?$/.test(hex)
+  return (/^#?([0-9a-fA-F]{3})(\1|[0-9a-fA-F]{3})?$/.test(hex)
   );
 }
 
@@ -627,6 +627,15 @@ var adjustBlueChannel = curry(function (factor, input) {
 });
 
 /**
+ * Convert rgb to hex but prepending a hash symbol for easy CSS insertion
+ * @param  {Array}  input array of rgb values
+ * @return {String}       hex string with hash at the start
+ */
+function convertRgbToHexWithHash(input) {
+  return '#' + convertRgbToHex(input);
+}
+
+/**
  * Returns th luminance for the hex color provided via RGB conversion
  * @param  {String} input  a color in hex format
  * @return {Number}        the un-rounded luminance value between 0 and 1
@@ -653,4 +662,4 @@ function convertHexToHsl(input) {
   return convertRgbToHsl(convertHexToRgb(input));
 }
 
-export { multiplyRgbChannels, divideRgbChannels, addRgbChannels, subtractRgbChannels, blendRgb, blendHex, stepRgb, stepHex, isValidRgb, isValidHex, isValidHsl, isValidColor, convertRgbToHex, convertHexToRgb, convertHslToRgb, convertRgbToHsl, convertRgbToLuminance, convertHexToLuminance, convertHslToHex, convertHexToHsl, setHue, adjustHue, setSaturation, adjustSaturation, setLightness, adjustLightness, setRedChannel, adjustRedChannel, setGreenChannel, adjustGreenChannel, setBlueChannel, adjustBlueChannel };
+export { multiplyRgbChannels, divideRgbChannels, addRgbChannels, subtractRgbChannels, blendRgb, blendHex, stepRgb, stepHex, isValidRgb, isValidHex, isValidHsl, isValidColor, convertRgbToHex, convertRgbToHexWithHash, convertHexToRgb, convertHslToRgb, convertRgbToHsl, convertRgbToLuminance, convertHexToLuminance, convertHslToHex, convertHexToHsl, setHue, adjustHue, setSaturation, adjustSaturation, setLightness, adjustLightness, setRedChannel, adjustRedChannel, setGreenChannel, adjustGreenChannel, setBlueChannel, adjustBlueChannel };

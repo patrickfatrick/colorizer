@@ -141,6 +141,7 @@ These behave as you'd expect, returning an array when converting to RGB or HSL, 
 
 ```javascript
 convertRgbToHex
+convertRgbToHexWithHash // just prepends a '#' to make it slightly easier for use in a stylesheet
 convertHexToRgb
 convertRgbToHsl
 convertHslToRgb
@@ -158,7 +159,7 @@ Colorizer exposes a few methods to help you validate colors against specific for
 isValidHex('da70d6') // true
 isValidHex('DA70D6') // true
 isValidHex('fff') // true
-isValidHex('#da70d6') // false, no hashes allowed for the validator
+isValidHex('#da70d6') // true
 isValidHex('ff') // false
 
 isValidRgb([ 218, 112, 214 ]) // true
