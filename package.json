@@ -1,7 +1,7 @@
 {
   "name": "colorizer",
   "version": "2.0.0",
-  "description": "A tiny library for performing manipulations and conversions to colors",
+  "description": "The tiny, composable, modular date library",
   "main": "dist/colorizer.umd.js",
   "module": "dist/colorizer.js",
   "format": "es6",

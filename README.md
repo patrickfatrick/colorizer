@@ -1,6 +1,6 @@
 # Colorizer
 
-_A tiny library for performing manipulations and conversions to colors._
+_The tiny, composable, modular date library._
 
 [![Circle CI](https://circleci.com/gh/patrickfatrick/colorizer.svg?style=shield)](https://circleci.com/gh/patrickfatrick/colorizer)
 [![codecov.io](https://codecov.io/github/patrickfatrick/colorizer/coverage.svg?branch=master)](https://codecov.io/github/patrickfatrick/colorizer?branch=master)
@@ -46,7 +46,7 @@ You'll notice the function is curried, which is nice because that allows you cre
 
 ```javascript
 const reduceChannels = multiplyRgbChannels(0.8)
-reduceChannels('#da70d6)
+reduceChannels('#da70d6')
 ```
 
 But you can also run the function as usual with all arguments supplied, and it will just the same.
@@ -55,7 +55,7 @@ The other fun thing is that you don't have to pass a color as your last argument
 
 ```javascript
 const reduceChannelsAndSaturation = multiplyRgbChannels(0.8)(adjustSaturation(-10))
-adjustChannelsAndSaturation('#da70d6)
+adjustChannelsAndSaturation('#da70d6')
 ```
 
 But note that while all functions are curried, not everything is chainable. That only applies to transforms (i.e. functions that output a manipulated color in RGB).
