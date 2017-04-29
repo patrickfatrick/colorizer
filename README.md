@@ -55,7 +55,7 @@ The other fun thing is that you don't have to pass a color as your last argument
 
 ```javascript
 const reduceChannelsAndSaturation = multiplyRgbChannels(0.8)(adjustSaturation(-10))
-adjustChannelsAndSaturation('#da70d6')
+reduceChannelsAndSaturation('#da70d6')
 ```
 
 But note that while all functions are curried, not everything is chainable. That only applies to transforms (i.e. functions that output a manipulated color in RGB).
