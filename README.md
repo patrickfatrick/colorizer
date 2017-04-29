@@ -1,6 +1,6 @@
 # Colorizer
 
-_The tiny, composable, modular date library._
+_The tiny, composable, modular color manipulation library._
 
 [![Circle CI](https://circleci.com/gh/patrickfatrick/colorizer.svg?style=shield)](https://circleci.com/gh/patrickfatrick/colorizer)
 [![codecov.io](https://codecov.io/github/patrickfatrick/colorizer/coverage.svg?branch=master)](https://codecov.io/github/patrickfatrick/colorizer?branch=master)
