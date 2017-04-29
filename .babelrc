@@ -1,11 +1,25 @@
 {
   "presets": [
-    "es2015"
+    [
+      "env",
+      {
+        "targets": { "browsers": [ "last 2 versions", "> 5%" ] },
+        "modules": false
+      }
+    ]
   ],
+  "plugins": [ "external-helpers" ],
   "env": {
-    "test": {
-      "plugins": [
-        "istanbul"
+    "development": {
+      "sourceMaps": "inline",
+      "plugins": [ "transform-runtime" ],
+      "presets": [
+        [
+          "env",
+          {
+            "modules": "commonjs"
+          }
+        ]
       ]
     }
   }

@@ -12,141 +12,183 @@ _A tiny library for performing manipulations and conversions to colors._
 
 ## What is it?
 
-Colorizer is a very small (5kb minified) library for handling color manipulation and conversion. It was inspired by what you can do in Sass so a lot of the same functionality is here. Given a color in hex, RGB, or HSL, you can:
+Colorizer is a very small (6kb minified) library for handling color manipulation and conversion. It was inspired by what you can do in Sass so a lot of the same functionality is here. Given a color in hex, RGB, or HSL, you can:
 
 - Add, subtract, divide, and multiply vales
 - Add, subtract, divide and multiply other colors
-- Performed stepped calculations for any of the operations listed above
-- Chain any of the math operations together
+- Performed stepped calculations for any of those operations
+- Chain any of the arithmetic operations together
 - Blend two colors together and receive a specified number of gradient steps
-- Adjust and set HSL values
-- Convert it to RGB, hex, or hsl
+- Adjust and set HSL or RGB values
+- Convert it to RGB, hex, or HSL
 - Get the luminance
-
-## Changelog
-
-#### v1.2.0
-
-HSL is now a first-class citizen. You can start with a color in HSL colorspace and do all the usual manipulations. Additionally you can adjust any color (no matter what space you start with) via HSL attributes. Set and adjust hue, saturation, and lightness to your heart's content!
-
-#### v1.1.0
-
-Testing, readme, API stabilised.
 
 ## Install
 
 ```bash
+$ yarn add colorizer
 $ git clone git@github.com:patrickfatrick/colorizer.git
 $ npm install colorizer
 $ bower install colorizer
 ```
 
-As always a `dist` folder is also included if you'd prefer to just include the minified source in your HTML.
+From there you can either import individual functions if you're bundling your front-end code the right way, or include the whole package in a `<script>` tag if your'e doing it _that_ way.
 
 ## Usage
 
-Once you've `import`ed or `require`d the library you can init a Colorizer object with
+Each function in colorizer has a similar signature, essentially something like
 
 ```javascript
-const color = Colorizer('#DA70D6') // Hex, with hash
-const color = Colorizer('DA70D6') // Hex, without hash
-const color = Colorizer('da70d6') // It can be upper- or lower-cased to your heart's content
-const color = Colorizer('fff') // You can also do this like in CSS
-const color = Colorizer([218, 112, 214]) // RGB, in the form of an array
-const color = Colorizer([302, 59, 65], true) // Set the hsl flag as your second parameter to use that
+addRgbChannel(/* Arguments */)(/*Input color */)
 ```
 
-The first argument should be the color to start with, the second argument is a boolean to indicate if your color is going to be HSL. From here you can perform any calculations, blending, stepping, or HSL adjustments, no matter which colorspace you start with.
-
-## Converting or returning a color
-
-At any point you can receive a color by using the `to` method, and the format should be passed as a string
+You'll notice the function is curried, which is nice because that allows you create custom functions and apply those any inputs.
 
 ```javascript
-color.to('rgb') // [218, 112, 214]
-color.to('hex') // 'da70d6'
-color.to('hsl') // [302, 59, 65]
-color.to('luminance') // 0.556470588235294, no rounding is applied
+const reduceChannels = multiplyRgbChannels(0.8)
+reduceChannels('#da70d6)
 ```
 
-## Manipulations
+But you can also run the function as usual with all arguments supplied, and it will just the same.
 
-You can add, subtract, multiply, and divide values. These return the instance rather than the color, so you can chain methods together (see below). You will have to combine this with `to` to receive a color at the end.
+The other fun thing is that you don't have to pass a color as your last argument at all, you can actually pass another custom function, and then colorizer will apply both functions in a left-right manner on the input color. Like so:
 
 ```javascript
-color.add(50).to('rgb') // [255, 162, 255]
-color.subtract(50).to('rgb') // [168, 62, 164]
-color.multiply(1.1).to('rgb') // [240, 123, 235]
-color.divide(1.1).to('rgb') // [198, 102, 195]
+const reduceChannelsAndSaturation = multiplyRgbChannels(0.8)(adjustSaturation(-10))
+adjustChannelsAndSaturation('#da70d6)
 ```
 
-You can add, subtract, multiply, and divde other colors
+But note that while all functions are curried, not everything is chainable. That only applies to transforms (i.e. functions that output a manipulated color in RGB).
+
+## Transforms
+
+Transforms manipulate the input color and output a new color in RGB format as an array. The input can be RGB or hex, with or without the hash (#), and either three- or six-digit hex codes will work. As for the factor to use, you can use a number, an RGB array, or a hex color as well. Meaning you can add colors to each other, for instance. As explained in Usage above, you can also chain these methods together to apply multiple transforms easily. Neat!
+
+### Arithmetic Transforms
+
+There are four kinds of arithmetic transforms: add, subtract, multiply, and divide. These work identically to how Sass computes color math. They all work very similarly. Because Sass's methods are kind of magical, and it's not exactly clear what is actually happening when you apply arithmetic operators to a color, I've named these functions to be pretty explicit about what you're doing, which is applying that operation to each RGB channel.
 
 ```javascript
-color.add('00b0ff').to('rgb') // [218, 255, 255]
-color.subtract('00b0ff').to('rgb') // [218, 0, 0]
-color.multiply('00b0ff').to('rgb') // [0, 255, 255]
-color.divide('00b0ff').to('rgb') // [255, 1, 1]
+addRgbChannels(10)([0, 0, 0]) // [ 10, 10, 10 ]
+subtractRgbChannels([ 218, 112, 214 ])('#fff') // [ 37, 143, 41 ]
+divideRgbChannels('#00B0FF')('da70d6') // [ 255, 1, 1 ]
+multiplyRgbChannels(1.1)('#DA70D6') // [ 240, 123, 235 ]
 ```
 
-You can chain these methods together
+### RGB Transforms
+
+These are pretty self-explanatory. Either adjust individual RGB channels or set them to a specific value.
 
 ```javascript
-color.add(50).multiply(1.1).to('rgb') // [255, 178, 255]
+adjustRedChannel(10)([ 218, 112, 214 ]) // [ 228, 112, 214 ]
+setRedChannel(100)([ 218, 112, 214 ]) // [ 100, 112, 214 ]
+adjustGreenChannel(-50)([ 218, 112, 214 ]) // [ 218, 62, 214 ]
+setGreenChannel(-1)([ 218, 112, 214 ]) // [ 218, 0, 214 ]
+adjustBlueChannel(100)([ 218, 112, 214 ]) // [ 218, 112, 255 ]
+setBlueChannel(500)([ 218, 112, 214 ]) // [ 218, 112, 255 ]
 ```
 
-## Stepped manipulations
+### HSL Transforms
 
-You can perform any of the manipulations in a stepped, non-chainable fashion, like so
+These functions work identically as the RGB transforms but to the hue (0-359), saturation (0-100), and lightness (0-100) values, and they also return an RGB array, and are also chainable.
 
 ```javascript
-color.step('multiply', 1.1, 10) // ['da70d6', 'f07beb', 'ff88ff', 'ff95ff', 'ffa4ff', 'ffb4ff', 'ffc6ff', 'ffdaff', 'fff0ff', 'ffffff', 'ffffff']
+adjustHue
+setHue
+adjustSaturation
+setSaturation
+adjustLightness
+setLightness
 ```
 
-Notice that the first color in the array is the original color.
+## Stepped transforms
 
-This method always returns hex, for now.
+You can perform any of the *arithmetic* transforms in a stepped, non-chainable fashion. The signature is
+
+```javascript
+stepHex(nameOfOperation, factorForOperation, numberOfSteps, inputColor)
+```
+
+Examples:
+
+```javascript
+stepHex('multiply', 1.1, 10)('da70d6') // [ 'da70d6', 'f07beb', 'ff88ff', 'ff95ff', 'ffa4ff', 'ffb4ff', 'ffc6ff', 'ffdaff', 'fff0ff', 'ffffff', 'ffffff' ]
+setRgb('divide')(1.1)(5)('da70d6') // you get the idea; outputs an array of RGB arrays
+```
+
+Notice that the first color in the output array is the original color.
 
 ## Blending colors
 
-You can create a gradient by performing a blend operation, returning a specified number of increments
+You can create a gradient by performing a blend operation, returning a specified number of increments. The signature is
 
 ```javascript
-color.blend('fff', 10) // ['da70d6', 'de7eda', 'e18dde', 'e59be2', 'e9a9e6', 'ecb8ea', 'f0c6ef', 'f4d4f3', 'f8e2f7', 'fbf1fb', 'ffffff']
+blendHex(numberOfStepsForGradient, leftColor, rightColor)
 ```
 
-First color returned is the original here as well, and the last is the one passed in.
-
-Also returns hex for the time being. Also not chainable.
-
-## Setting and adjusting HSL values
-
-In addition to all of that you can now manipulate the hue, saturation, and lightness of the color directly. The methods follow these patterns
+Examples:
 
 ```javascript
-color.setHue(100).to('rgb') // [148, 218, 113]
-color.adjustHue(-202).to('rgb') // [148, 218, 113]
-color.setSaturation(50).to('rgb') // [210, 121, 207]
-color.adjustSaturation(-9).to('rgb') // [210, 121, 207]
-color.setLightness(50).to('rgb') // [203, 52, 198]
-color.adjustLightness(-15).to('rgb') // [203, 52, 198]
+blendHex(10)('da70d6')('fff') // ['da70d6', 'de7eda', 'e18dde', 'e59be2', 'e9a9e6', 'ecb8ea', 'f0c6ef', 'f4d4f3', 'f8e2f7', 'fbf1fb', 'ffffff']
+blendRgb(5, 'da70d6')('fff') // you get the idea; outputs an array of RGB arrays
 ```
 
-These methods are chainable either with other HSL manipulation methods or with the add/subtract/multiply/divide methods.
+The blend occurs in a left-right fashion here, where the first color in the output array is the second argument and the last color is the third argument.
+
+## Converters
+
+These behave as you'd expect, returning an array when converting to RGB or HSL, and a string with no hash when converting to hex. There are also methods for converting to luminance (between 0 and 1).
+
+```javascript
+convertRgbToHex
+convertHexToRgb
+convertRgbToHsl
+convertHslToRgb
+convertHexToHsl
+convertHslToHex
+convertRgbToLuminance
+convertHexToLuminance
+```
+
+## Validators
+
+Colorizer exposes a few methods to help you validate colors against specific formats.
+
+```javascript
+isValidHex('da70d6') // true
+isValidHex('DA70D6') // true
+isValidHex('fff') // true
+isValidHex('#da70d6') // false, no hashes allowed for the validator
+isValidHex('ff') // false
+
+isValidRgb([ 218, 112, 214 ]) // true
+isValidRgb([ -1, 0, 0 ]) // false
+isValidRgb([ 0, 0, 260 ]) // false
+isValidRgb([ 218, 112 ]) // false
+
+isValidHsl([ 359, 100, 100 ]) // true
+isValidHsl([ 360, 0, 0 ]) // false, 359 is the max hue
+isValidHsl([ 0, -1, 0 ]) // false
+
+// This function checks the input against all of the above validators until
+// one returns true, and otherwise returns false
+isValidColor('da70d6') // true
+isValidColor([ 359, 255, 255 ]) // false
+```
 
 ## Running the tests
 
 ```bash
-$ npm install
-$ npm test
+$ yarn test
 ```
 
-`$ npm run report` will display the code coverage report.
+## Linting and building the dist files
 
-## What's the plan?
+```bash
+$ yarn run build
+```
 
-- Possibly convert to even more formats
-- Return any format for the stepped and blended operations
+There are other scripts in package.json to build individual files and such.
 
 ## License
 

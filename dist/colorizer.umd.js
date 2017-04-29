@@ -1,3 +1,9 @@
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.colorizer = global.colorizer || {})));
+}(this, (function (exports) { 'use strict';
+
 /**
  * Check that the array provided can be a valid rgb color
  * @param  {Array}   rgb rgb values to test
@@ -653,4 +659,39 @@ function convertHexToHsl(input) {
   return convertRgbToHsl(convertHexToRgb(input));
 }
 
-export { multiplyRgbChannels, divideRgbChannels, addRgbChannels, subtractRgbChannels, blendRgb, blendHex, stepRgb, stepHex, isValidRgb, isValidHex, isValidHsl, isValidColor, convertRgbToHex, convertHexToRgb, convertHslToRgb, convertRgbToHsl, convertRgbToLuminance, convertHexToLuminance, convertHslToHex, convertHexToHsl, setHue, adjustHue, setSaturation, adjustSaturation, setLightness, adjustLightness, setRedChannel, adjustRedChannel, setGreenChannel, adjustGreenChannel, setBlueChannel, adjustBlueChannel };
+exports.multiplyRgbChannels = multiplyRgbChannels;
+exports.divideRgbChannels = divideRgbChannels;
+exports.addRgbChannels = addRgbChannels;
+exports.subtractRgbChannels = subtractRgbChannels;
+exports.blendRgb = blendRgb;
+exports.blendHex = blendHex;
+exports.stepRgb = stepRgb;
+exports.stepHex = stepHex;
+exports.isValidRgb = isValidRgb;
+exports.isValidHex = isValidHex;
+exports.isValidHsl = isValidHsl;
+exports.isValidColor = isValidColor;
+exports.convertRgbToHex = convertRgbToHex;
+exports.convertHexToRgb = convertHexToRgb;
+exports.convertHslToRgb = convertHslToRgb;
+exports.convertRgbToHsl = convertRgbToHsl;
+exports.convertRgbToLuminance = convertRgbToLuminance;
+exports.convertHexToLuminance = convertHexToLuminance;
+exports.convertHslToHex = convertHslToHex;
+exports.convertHexToHsl = convertHexToHsl;
+exports.setHue = setHue;
+exports.adjustHue = adjustHue;
+exports.setSaturation = setSaturation;
+exports.adjustSaturation = adjustSaturation;
+exports.setLightness = setLightness;
+exports.adjustLightness = adjustLightness;
+exports.setRedChannel = setRedChannel;
+exports.adjustRedChannel = adjustRedChannel;
+exports.setGreenChannel = setGreenChannel;
+exports.adjustGreenChannel = adjustGreenChannel;
+exports.setBlueChannel = setBlueChannel;
+exports.adjustBlueChannel = adjustBlueChannel;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
