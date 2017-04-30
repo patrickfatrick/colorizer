@@ -641,6 +641,10 @@ function convertRgbToHexWithHash(input) {
   return '#' + convertRgbToHex(input);
 }
 
+function convertRgbToCss(input) {
+  return 'rgb(' + input[0] + ', ' + input[1] + ', ' + input[2] + ')';
+}
+
 /**
  * Returns th luminance for the hex color provided via RGB conversion
  * @param  {String} input  a color in hex format
@@ -682,6 +686,7 @@ exports.isValidHsl = isValidHsl;
 exports.isValidColor = isValidColor;
 exports.convertRgbToHex = convertRgbToHex;
 exports.convertRgbToHexWithHash = convertRgbToHexWithHash;
+exports.convertRgbToCss = convertRgbToCss;
 exports.convertHexToRgb = convertHexToRgb;
 exports.convertHslToRgb = convertHslToRgb;
 exports.convertRgbToHsl = convertRgbToHsl;

@@ -142,6 +142,7 @@ These behave as you'd expect, returning an array when converting to RGB or HSL, 
 ```javascript
 convertRgbToHex
 convertRgbToHexWithHash // just prepends a '#' to make it slightly easier for use in a stylesheet
+convertRgbToCss // returns the rgb values in CSS-ready format such as 'rgb(218, 112, 214)'
 convertHexToRgb
 convertRgbToHsl
 convertHslToRgb

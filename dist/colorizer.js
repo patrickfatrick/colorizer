@@ -635,6 +635,10 @@ function convertRgbToHexWithHash(input) {
   return '#' + convertRgbToHex(input);
 }
 
+function convertRgbToCss(input) {
+  return 'rgb(' + input[0] + ', ' + input[1] + ', ' + input[2] + ')';
+}
+
 /**
  * Returns th luminance for the hex color provided via RGB conversion
  * @param  {String} input  a color in hex format
@@ -662,4 +666,4 @@ function convertHexToHsl(input) {
   return convertRgbToHsl(convertHexToRgb(input));
 }
 
-export { multiplyRgbChannels, divideRgbChannels, addRgbChannels, subtractRgbChannels, blendRgb, blendHex, stepRgb, stepHex, isValidRgb, isValidHex, isValidHsl, isValidColor, convertRgbToHex, convertRgbToHexWithHash, convertHexToRgb, convertHslToRgb, convertRgbToHsl, convertRgbToLuminance, convertHexToLuminance, convertHslToHex, convertHexToHsl, setHue, adjustHue, setSaturation, adjustSaturation, setLightness, adjustLightness, setRedChannel, adjustRedChannel, setGreenChannel, adjustGreenChannel, setBlueChannel, adjustBlueChannel };
+export { multiplyRgbChannels, divideRgbChannels, addRgbChannels, subtractRgbChannels, blendRgb, blendHex, stepRgb, stepHex, isValidRgb, isValidHex, isValidHsl, isValidColor, convertRgbToHex, convertRgbToHexWithHash, convertRgbToCss, convertHexToRgb, convertHslToRgb, convertRgbToHsl, convertRgbToLuminance, convertHexToLuminance, convertHslToHex, convertHexToHsl, setHue, adjustHue, setSaturation, adjustSaturation, setLightness, adjustLightness, setRedChannel, adjustRedChannel, setGreenChannel, adjustGreenChannel, setBlueChannel, adjustBlueChannel };

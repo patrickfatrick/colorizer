@@ -11,25 +11,25 @@ import { convertRgbToHex } from '../src'
  */
 
 test('returns hex value of the color', (t) => {
-  t.deepEqual(convertRgbToHex([ 218, 112, 214 ]), 'da70d6')
+  t.is(convertRgbToHex([ 218, 112, 214 ]), 'da70d6')
 })
 
 test('returns the hex value of white', (t) => {
-  t.deepEqual(convertRgbToHex([ 255, 255, 255 ]), 'ffffff')
+  t.is(convertRgbToHex([ 255, 255, 255 ]), 'ffffff')
 })
 
 test('returns the hex value of black', (t) => {
-  t.deepEqual(convertRgbToHex([ 0, 0, 0 ]), '000000')
+  t.is(convertRgbToHex([ 0, 0, 0 ]), '000000')
 })
 
 test('returns the hex value of red', (t) => {
-  t.deepEqual(convertRgbToHex([ 255, 0, 0 ]), 'ff0000')
+  t.is(convertRgbToHex([ 255, 0, 0 ]), 'ff0000')
 })
 
 test('returns the hex value of green', (t) => {
-  t.deepEqual(convertRgbToHex([ 0, 255, 0 ]), '00ff00')
+  t.is(convertRgbToHex([ 0, 255, 0 ]), '00ff00')
 })
 
 test('returns the hex value of blue', (t) => {
-  t.deepEqual(convertRgbToHex([ 0, 0, 255 ]), '0000ff')
+  t.is(convertRgbToHex([ 0, 0, 255 ]), '0000ff')
 })

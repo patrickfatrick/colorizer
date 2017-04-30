@@ -17,6 +17,10 @@ export function convertRgbToHexWithHash (input) {
   return `#${convertRgbToHex(input)}`
 }
 
+export function convertRgbToCss (input) {
+  return `rgb(${input[0]}, ${input[1]}, ${input[2]})`
+}
+
 /**
  * Returns th luminance for the hex color provided via RGB conversion
  * @param  {String} input  a color in hex format

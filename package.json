@@ -1,6 +1,6 @@
 {
   "name": "colorizer",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "The tiny, composable, modular color manipulation library",
   "main": "dist/colorizer.umd.js",
   "module": "dist/colorizer.js",

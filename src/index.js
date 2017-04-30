@@ -21,6 +21,7 @@ import {
 import {
   convertRgbToHex,
   convertRgbToHexWithHash,
+  convertRgbToCss,
   convertHexToRgb,
   convertHslToRgb,
   convertRgbToHsl,
@@ -45,6 +46,7 @@ export {
   isValidColor,
   convertRgbToHex,
   convertRgbToHexWithHash,
+  convertRgbToCss,
   convertHexToRgb,
   convertHslToRgb,
   convertRgbToHsl,
